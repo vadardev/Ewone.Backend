@@ -1,0 +1,60 @@
+CREATE TABLE IF NOT EXISTS public.users
+(
+    id uuid NOT NULL,
+    email text COLLATE pg_catalog."default" NOT NULL,
+    name text COLLATE pg_catalog."default",
+    createdate timestamp without time zone NOT NULL,
+    CONSTRAINT users_pkey PRIMARY KEY (id),
+    CONSTRAINT email_ux UNIQUE (email)
+)
+
+CREATE TABLE IF NOT EXISTS public.words
+(
+    id uuid NOT NULL,
+    name text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT words_pkey PRIMARY KEY (id)
+)
+
+CREATE TABLE IF NOT EXISTS public.cards
+(
+    id uuid NOT NULL,
+    definition text COLLATE pg_catalog."default" NOT NULL,
+    pictureurl text COLLATE pg_catalog."default",
+    idparent uuid,
+    idauthor uuid,
+    isdefault boolean NOT NULL DEFAULT false,
+    example text COLLATE pg_catalog."default",
+    otherexample text COLLATE pg_catalog."default",
+    idword uuid NOT NULL,
+    CONSTRAINT cards_pk PRIMARY KEY (id)
+)
+
+CREATE TABLE IF NOT EXISTS public.usercards
+(
+    id uuid NOT NULL,
+    iduser uuid NOT NULL,
+    idcard uuid NOT NULL,
+    CONSTRAINT usercards_pkey PRIMARY KEY (id),
+    CONSTRAINT user_card_ux UNIQUE (iduser, idcard)
+)
+
+
+
+
+
+INSERT INTO public.words(id, name)
+	VALUES ('15F333F6-69F9-4D2A-AE33-9F2512776A33', 'book');
+	
+INSERT INTO public.words(id, name)
+	VALUES ('CDD1F627-095F-4CFF-8857-3E0E324A3C60', 'apple');
+	
+INSERT INTO public.words(id, name)
+	VALUES ('1FBDEBCC-57F9-4CEB-9C9F-EF377E6BD74B', 'cat');
+	
+
+INSERT INTO public.cards(id, idword, definition, pictureurl, examples, idparent, idauthor, isdefault)
+	VALUES ('4A582F15-45A1-4261-A3AC-C41EBAAB817B', '15F333F6-69F9-4D2A-AE33-9F2512776A33', 'a written text that can be published in printed or electronic form', 'https://dictionary.cambridge.org/images/thumb/book_noun_001_01679.jpg', '[{"example":"We are reading a different book this week"}]', null, null, true);
+INSERT INTO public.cards(id, idword, definition, pictureurl, examples, idparent, idauthor, isdefault)
+	VALUES ('B37E2D18-5B41-473C-AB36-09284566E24F', 'CDD1F627-095F-4CFF-8857-3E0E324A3C60', 'a round fruit with firm, white flesh and a green, red, or yellow skin', 'https://dictionary.cambridge.org/images/thumb/apple_noun_001_00650.jpg', '[{"example":"The apple tree at the bottom of the garden is beginning to blossom"}]', null, null, true);
+INSERT INTO public.cards(id, idword, definition, pictureurl, examples, idparent, idauthor, isdefault)
+	VALUES ('B8A7AF59-00C9-4960-B96E-1393E4C999BB', '1FBDEBCC-57F9-4CEB-9C9F-EF377E6BD74B', 'a small animal with fur, four legs, a tail, and claws, usually kept as a pet or for catching mice', 'https://dictionary.cambridge.org/images/thumb/cat_noun_001_02368.jpg', '[{"example":"My cat likes dozing in front of the fire"}]', null, null, true);
